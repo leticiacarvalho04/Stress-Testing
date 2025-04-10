@@ -53,7 +53,13 @@ Imagine um site de e-commerce durante a Black Friday:
 1. **Configurar o JMeter** para simular usuários acessando a página principal do e-commerce.
 2. **Definir o número de threads (usuários simulados)**:
    - Performance Testing: 10.000 usuários.
+   ![Com 10.000 requisições](./img/10000Requisicoes.jpg)
+   ![Com 10.000 requisições](./img/10000Requisicoes_2.jpg)
+   ![Com 10.000 requisições](./img/10000Requisicoes_3.jpg)
    - Stress Testing: 50.000 usuários.
+   ![Com 50.000 requisições](./img/50000Requisicoes.jpg)
+   ![Com 50.000 requisições](./img/50000Requisicoes_2.jpg)
+   ![Com 50.000 requisições](./img/50000Requisicoes_3.jpg)
 3. **Executar o teste** e monitorar métricas como tempo de resposta, taxa de erro e uso de CPU.
 4. **Analisar resultados**:
    - Gráficos de tempo de resposta.
