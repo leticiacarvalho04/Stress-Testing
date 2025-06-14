@@ -1,18 +1,20 @@
-# locustfile.py
 from locust import HttpUser, task, between
 import random
 
-class WebsiteUser(HttpUser):
-    wait_time = between(1, 3)  # Tempo entre requisições
+class PerformanceUser(HttpUser):
+    wait_time = between(0.5, 2)
     
-    @task(3)  # Peso maior (executado 3x mais)
-    def test_fast_endpoint(self):
+    @task(3)
+    def fast_endpoint(self):
         self.client.get("/fast")
     
-    @task(2)
-    def test_slow_endpoint(self):
-        self.client.get("/slow")
+    @task(5)
+    def db_operation(self):
+        self.client.get("/heavy-db")
     
-    @task(1)  # Peso menor
-    def test_error_prone_endpoint(self):
-        self.client.get("/error-prone")
+    @task(1)
+    def intensive_operations(self):
+        if random.random() > 0.5:
+            self.client.get("/memory-intensive")
+        else:
+            self.client.get("/cpu-intensive")

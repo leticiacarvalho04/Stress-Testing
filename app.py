@@ -3,6 +3,7 @@ from flask import Flask, jsonify
 import time
 import random
 import sqlite3
+import math
 
 app = Flask(__name__)
 
@@ -55,6 +56,49 @@ def error_prone_endpoint():
         "status": "success",
         "user": dict(data) if data else "No users"
     })
+
+# Adicione esses novos 
+@app.route('/heavy-db')
+def heavy_db_operation():
+    start = time.time()
+    conn = get_db_connection()
+
+    # Operação mais pesada com múltiplas tabelas
+    for _ in range(random.randint(10, 50)):
+        conn.execute('''SELECT * FROM users u1 
+                       JOIN users u2 ON u1.id = u2.id 
+                       JOIN users u3 ON u1.id != u3.id 
+                       LIMIT 100''').fetchall()
+    conn.close()
+    duration = time.time() - start
+    app.logger.info(f"heavy-db took {duration:.2f} seconds")
+    return jsonify({"status": "heavy operation completed"})
+
+
+@app.route('/memory-intensive')
+def memory_intensive():
+    # Consumo crescente de memória
+    big_data = []
+    for _ in range(random.randint(1000, 5000)):
+        big_data.append([random.random() for _ in range(1000)])
+    
+    return jsonify({"status": "memory allocated", "size": len(big_data)})
+
+@app.route('/cpu-intensive')
+def cpu_intensive():
+    # Cálculo pesado de CPU
+    start = time.time()
+    for _ in range(1000000):
+        math.factorial(random.randint(1, 100))
+    
+    return jsonify({"status": "cpu task done", "time": time.time() - start})
+
+@app.route('/break-me')
+def break_me():
+    # Consumo extremo de memória
+    data = [str(i)*100000 for i in range(10000)]
+    return jsonify({"status": "memory allocated"})
+
 
 if __name__ == '__main__':
     app.run(port=5000)
